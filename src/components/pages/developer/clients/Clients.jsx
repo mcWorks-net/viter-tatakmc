@@ -8,6 +8,7 @@ import React from "react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import ClientsList from "./ClientsList.jsx";
 import ModalAddClient from "./ModalAddClient.jsx";
+import { setIsAdd } from "@/components/store/StoreAction.jsx";
 
 const Clients = () => {
   const { store, dispatch } = React.useContext(StoreContext);
@@ -30,7 +31,7 @@ const Clients = () => {
                 <BsPlusCircleFill className="md:hidden" /> Add
               </button>
             </div>
-            <ClientsList />
+            <ClientsList setItemEdit={setItemEdit}/>
             <Footer />
           </div>
         </div>

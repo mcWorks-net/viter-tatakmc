@@ -30,7 +30,7 @@ const ModalAddClient = ({ itemEdit }) => {
       ),
     onSuccess: (data) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["client"] });
+      queryClient.invalidateQueries({ queryKey: ["clients"] });
       if (data.success) {
         dispatch(setIsAdd(false));
         dispatch(setSuccess(true));
@@ -47,6 +47,9 @@ const ModalAddClient = ({ itemEdit }) => {
   const initVal = {
     client_aid : itemEdit ? itemEdit.client_aid : "",
     client_name: itemEdit ? itemEdit.client_name : "",
+    client_email: itemEdit ? itemEdit.client_email : "",
+    client_phone: itemEdit ? itemEdit.client_phone : "",
+    client_address: itemEdit ? itemEdit.client_address : "",
     client_name_old: itemEdit ? itemEdit.client_name : "",
   };
 
@@ -88,7 +91,30 @@ const ModalAddClient = ({ itemEdit }) => {
                         disabled={mutation.isLoading}
                       />
                     </div>
-
+                    <div className="form__wrap">
+                      <InputText
+                        label="Email"
+                        type="email"
+                        name="client_email"
+                        disabled={mutation.isLoading}
+                      />
+                    </div>
+                    <div className="form__wrap">
+                      <InputText
+                        label="Phone"
+                        type="text"
+                        name="client_phone"
+                        disabled={mutation.isLoading}
+                      />
+                    </div>
+                    <div className="form__wrap">
+                      <InputText
+                        label="Adress"
+                        type="text"
+                        name="client_address"
+                        disabled={mutation.isLoading}
+                      />
+                    </div>
                     <div className="modal__action flex justify-end mt-6 gap-2">
                       <button
                         className="btn btn--accent"

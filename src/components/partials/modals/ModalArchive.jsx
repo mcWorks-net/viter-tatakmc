@@ -18,9 +18,7 @@ import ButtonSpinner from "../spinners/ButtonSpinner";
 const ModalArchive = ({ mysqlApiArchive, item, queryKey, isActive }) => {
   const { dispatch } = React.useContext(StoreContext);
   const queryClient = useQueryClient();
-  console.log(isActive)
-  let activeValue = isActive; 
-  
+
 
   const mutation = useMutation({
     mutationFn: (values) => queryData(mysqlApiArchive, "put", values),
@@ -47,7 +45,7 @@ const ModalArchive = ({ mysqlApiArchive, item, queryKey, isActive }) => {
   const handleYes = async () => {
     // mutate data
     mutation.mutate({
-      isActive: activeValue,
+      isActive: isActive ? 0 : 1,
     });
   };
 
@@ -64,7 +62,7 @@ const ModalArchive = ({ mysqlApiArchive, item, queryKey, isActive }) => {
         </div>
         <div className="modal__body ">
           <p>{`You are about to ${
-            activeValue ? "restore" : "archive"
+            isActive ? "restore" : "archive"
           } this record, do you want to proceed?`}</p>
           <div className="modal__action flex justify-end gap-4 mt-8">
             <button
@@ -75,7 +73,7 @@ const ModalArchive = ({ mysqlApiArchive, item, queryKey, isActive }) => {
             >
               {mutation.isLoading ? (
                 <ButtonSpinner />
-              ) : activeValue ? (
+              ) : isActive ? (
                 "Restore"
               ) : (
                 "Archive"

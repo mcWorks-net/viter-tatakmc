@@ -9,10 +9,35 @@ import React from "react";
 import { BsPlusCircleFill } from "react-icons/bs";
 import ModalAddOrder from "./ModalAddOrder.jsx";
 import OrdersList from "./OrdersList.jsx";
+import useQueryData from "@/components/custom-hooks/useQueryData.jsx";
 
 const Orders = () => {
   const { store, dispatch } = React.useContext(StoreContext);
   const [itemEdit, setItemEdit] = React.useState(null);
+
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: services,
+  } = useQueryData(
+    "/v1/services", // endpoint
+    "get", // method
+    "services" // key
+  );
+
+  const { 
+    data:client
+  } =  useQueryData(
+    "/v1/client", // endpoint
+    "get", // method
+    "client" // key
+  );
+
+
+
+
+  
 
   const handleAdd = () => {
     dispatch(setIsAdd(true));
@@ -37,7 +62,7 @@ const Orders = () => {
           </div>
         </div>
       </main>
-      {store.isAdd && <ModalAddOrder itemEdit={itemEdit} />}
+      {store.isAdd && <ModalAddOrder itemEdit={itemEdit} services={services} client={client}/>}
       {store.validate && <ModalValidate />}
       {store.success && <Toast />}
     </>

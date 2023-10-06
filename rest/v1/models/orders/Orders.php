@@ -19,20 +19,31 @@ class Orders
     public $emp_search;
 
     public $tblOrders;
+    public $tblClient;
+    public $tblServices;
+
 
     public function __construct($db)
     {
         $this->connection = $db;
         $this->tblOrders = "tbl_orders";
+        $this->tblClient = "tbl_client";
+        $this->tblServices = "tbl_settings_services";
         
     }
 
     public function readAll()
       {
         try {
-          $sql = "select * from {$this->tblOrders} ";
-          $sql .= "order by order_is_active desc, ";
-          $sql .= "order_aid asc ";
+          $sql = "select ";
+          $sql .= "client.client_name ";
+          $sql .= "from {$this->tblOrders} as orders, ";
+          $sql .= "{$this->tblClient} as client, ";
+          $sql .= "{$this->tblServices} as services ";
+          $sql .= "where orders.order_service_id = services.service_aid ";
+          $sql .= "and orders.order_client_id = client.client_aid ";
+          $sql .= "order by orders.order_is_active desc, ";
+          $sql .= "orders.order_aid asc ";
           $query = $this->connection->query($sql);
         } catch (PDOException $ex) {
           $query = false;

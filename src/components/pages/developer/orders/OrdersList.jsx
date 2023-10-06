@@ -1,3 +1,4 @@
+import useQueryData from "@/components/custom-hooks/useQueryData";
 import NoData from "@/components/partials/NoData.jsx";
 import Pills from "@/components/partials/Pills.jsx";
 import ServerError from "@/components/partials/ServerError.jsx";
@@ -15,15 +16,19 @@ const OrdersList = () => {
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
 
-  const category = {
-    data: [
-      {
-        id: "1",
-        name: "name",
-      },
-    ],
-  };
 
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: services,
+  } = useQueryData(
+    "/v1/services", // endpoint
+    "get", // method
+    "services" // key
+  );
+
+  console.log(services);
   return (
     <>
       <div className="table__wrapper bg-white p-2 rounded-md ">
@@ -40,13 +45,13 @@ const OrdersList = () => {
 
           <tbody>
             {/* {(isLoading || category?.data.length === 0) && ( */}
-            {(true || category?.data.length === 0) && (
+            {/* {(true || category?.data.length === 0) && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
                   {true ? <TableLoading count={20} cols={3} /> : <NoData />}
                 </td>
               </tr>
-            )}
+            )} */}
 
             {true && (
               <tr className="text-center ">
@@ -56,7 +61,7 @@ const OrdersList = () => {
               </tr>
             )}
 
-            {category?.data.map((item, key) => {
+            {/* {category?.data.map((item, key) => {
               return (
                 <tr key={key}>
                   <td>1.</td>
@@ -107,7 +112,7 @@ const OrdersList = () => {
                   </td>
                 </tr>
               );
-            })}
+            })} */}
           </tbody>
         </table>
       </div>

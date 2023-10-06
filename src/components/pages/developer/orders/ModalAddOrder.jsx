@@ -1,4 +1,4 @@
-import { InputText } from "@/components/helpers/FormInputs.jsx";
+import { InputSelect, InputText } from "@/components/helpers/FormInputs.jsx";
 import { queryData } from "@/components/helpers/queryData.jsx";
 import ButtonSpinner from "@/components/partials/spinners/ButtonSpinner.jsx";
 import Modal from "@/components/partials/wrapper/Modal.jsx";
@@ -15,9 +15,14 @@ import React from "react";
 import { FaTimes } from "react-icons/fa";
 import * as Yup from "yup";
 
-const ModalAddOrder = ({ itemEdit }) => {
+const ModalAddOrder = ({ itemEdit , services , client}) => {
   const { dispatch } = React.useContext(StoreContext);
   const queryClient = useQueryClient();
+
+  const [serviceId, setServiceId] = React.useState(null);
+
+  const [clientId, setClientId] = React.useState(null);
+
 
   const mutation = useMutation({
     mutationFn: (values) =>
@@ -58,6 +63,14 @@ const ModalAddOrder = ({ itemEdit }) => {
     dispatch(setIsAdd(false));
   };
 
+  const handleChangeSelect = (e) => {
+    setServiceId(e.target.options[e.target.selectedIndex].value);
+  };
+
+  const handleChangeSelectClient = (e) => {
+    setClientId(e.target.options[e.target.selectedIndex].value);
+  };
+
   return (
     <>
       <Modal>
@@ -88,7 +101,56 @@ const ModalAddOrder = ({ itemEdit }) => {
                         disabled={mutation.isLoading}
                       />
                     </div>
-
+                    <div className="form__wrap">
+                    <InputSelect
+                    label="Service Type"
+                    name="product_category_id"
+                    disabled={mutation.isLoading}
+                    onChange={(e) => handleChangeSelect(e)}
+                  >
+                    <optgroup label="Select Category">
+                      <option value="" hidden></option>
+                      {services.data.length > 0 ? (
+                        services.data.map((item, key) => (
+                          <option
+                            key={key}
+                            value={item.service_aid}
+                            title={item.service_type}
+                          >
+                            {item.service_type}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="">No data</option>
+                      )}
+                    </optgroup>
+                  </InputSelect>
+                    </div>
+                    <div className="form__wrap">
+                    <InputSelect
+                    label="Client"
+                    name="product_category_id"
+                    disabled={mutation.isLoading}
+                    onChange={(e) => handleChangeSelectClient(e)}
+                  >
+                    <optgroup label="Select Category">
+                      <option value="" hidden></option>
+                      {client.data.length > 0 ? (
+                        client.data.map((item, key) => (
+                          <option
+                            key={key}
+                            value={item.client_aid}
+                            title={item.client_name}
+                          >
+                            {item.client_name}
+                          </option>
+                        ))
+                      ) : (
+                        <option value="">No data</option>
+                      )}
+                    </optgroup>
+                  </InputSelect>
+                    </div>
                     <div className="modal__action flex justify-end mt-6 gap-2">
                       <button
                         className="btn btn--accent"

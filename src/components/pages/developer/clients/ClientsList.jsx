@@ -5,13 +5,13 @@ import ServerError from "@/components/partials/ServerError.jsx";
 import TableLoading from "@/components/partials/TableLoading.jsx";
 import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
 import ModalDelete from "@/components/partials/modals/ModalDelete.jsx";
-import { setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
+import { setIsAdd, setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { MdArchive, MdDelete, MdEdit, MdRestorePage } from "react-icons/md";
 
-const ClientsList = () => {
+const ClientsList = ({setItemEdit}) => {
   const { store, dispatch } = React.useContext(StoreContext);
   const [dataItem, setData] = React.useState(null);
   const [id, setId] = React.useState(null);

@@ -23,14 +23,14 @@ const ModalAddService = ({ itemEdit }) => {
     mutationFn: (values) =>
       queryData(
         itemEdit
-          ? `/v1/client-class/${itemEdit.client_class_aid}`
-          : "/v1/client-class",
+          ? `/v1/services/${itemEdit.service_aid}`
+          : "/v1/services",
         itemEdit ? "put" : "post",
         values
       ),
     onSuccess: (data) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["client-class"] });
+      queryClient.invalidateQueries({ queryKey: ["services"] });
       if (data.success) {
         dispatch(setIsAdd(false));
         dispatch(setSuccess(true));
@@ -45,13 +45,13 @@ const ModalAddService = ({ itemEdit }) => {
   });
 
   const initVal = {
-    client_class_aid: itemEdit ? itemEdit.client_class_aid : "",
-    client_class_name: itemEdit ? itemEdit.client_class_name : "",
-    client_class_name_old: itemEdit ? itemEdit.client_class_name : "",
+    service_aid : itemEdit ? itemEdit.service_aid : "",
+    service_type: itemEdit ? itemEdit.service_type : "",
+    service_type_old: itemEdit ? itemEdit.service_type : "",
   };
 
   const yupSchema = Yup.object({
-    client_class_name: Yup.string().required("Required"),
+    service_type: Yup.string().required("Required"),
   });
 
   const handleClose = () => {
@@ -84,7 +84,7 @@ const ModalAddService = ({ itemEdit }) => {
                       <InputText
                         label="Service Name"
                         type="text"
-                        name="client_class_name"
+                        name="service_type"
                         disabled={mutation.isLoading}
                       />
                     </div>

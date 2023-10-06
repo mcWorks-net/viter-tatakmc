@@ -1,28 +1,70 @@
+import useQueryData from "@/components/custom-hooks/useQueryData";
 import NoData from "@/components/partials/NoData.jsx";
 import Pills from "@/components/partials/Pills.jsx";
 import ServerError from "@/components/partials/ServerError.jsx";
 import TableLoading from "@/components/partials/TableLoading.jsx";
 import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
 import ModalDelete from "@/components/partials/modals/ModalDelete.jsx";
+import { setIsAdd, setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { MdArchive, MdDelete, MdEdit, MdRestorePage } from "react-icons/md";
 
-const ServicesList = () => {
+const ServicesList = ({setItemEdit}) => {
   const { store, dispatch } = React.useContext(StoreContext);
   const [dataItem, setData] = React.useState(null);
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
 
-  const category = {
-    data: [
-      {
-        id: "1",
-        name: "name",
-      },
-    ],
+  let counter = 1;
+
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: services,
+  } = useQueryData(
+    "/v1/services", // endpoint
+    "get", // method
+    "services" // key
+  );
+
+      
+  const handleEdit = (item) => {
+    dispatch(setIsAdd(true));
+    setItemEdit(item);
   };
+
+
+  const handleArchive = (item) => {
+    dispatch(setIsConfirm(true));
+    setId(item.service_aid );
+    setData(item);
+    setActive(true)
+  };
+
+  const handleRestore = (item) => {
+    dispatch(setIsConfirm(true));
+    setId(item.service_aid );
+    setData(item);
+    setActive(false)
+  };
+
+  const handleDelete = (item) => {
+    dispatch(setIsDelete(true));
+    setId(item.service_aid);
+    setData(item);
+  };
+
+  // const category = {
+  //   data: [
+  //     {
+  //       id: "1",
+  //       name: "name",
+  //     },
+  //   ],
+  // };
 
   return (
     <>
@@ -31,16 +73,14 @@ const ServicesList = () => {
           <thead>
             <tr>
               <th className="w-[40px]">#</th>
-              <th>Category</th>
-
+              <th>Service Name</th>
               <th>Status</th>
               <th className="header__action text-right"></th>
             </tr>
           </thead>
 
           <tbody>
-            {/* {(isLoading || category?.data.length === 0) && ( */}
-            {(true || category?.data.length === 0) && (
+            {(isLoading || services?.data.length === 0) && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
                   {true ? <TableLoading count={20} cols={3} /> : <NoData />}
@@ -48,7 +88,7 @@ const ServicesList = () => {
               </tr>
             )}
 
-            {true && (
+            {error && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
                   <ServerError />
@@ -56,14 +96,14 @@ const ServicesList = () => {
               </tr>
             )}
 
-            {category?.data.map((item, key) => {
+            {services?.data.map((item, key) => {
               return (
                 <tr key={key}>
-                  <td>1.</td>
-                  <td>xxxxx</td>
+                  <td>{counter++}</td>
+                  <td>{item.service_type}</td>
 
                   <td>
-                    {true === 1 ? (
+                    {item.service_is_active === 1 ? (
                       <Pills label="Active" />
                     ) : (
                       <Pills bgColor="bg-disable" label="Inactive" />
@@ -73,7 +113,7 @@ const ServicesList = () => {
                     <div className="table__action">
                       <HiDotsHorizontal />
                       <ul className="">
-                        {item.category_is_active === 1 ? (
+                        {item.service_is_active === 1 ? (
                           <>
                             <li className="tooltip" data-tooltip="Edit">
                               <button onClick={() => handleEdit(item)}>
@@ -113,17 +153,17 @@ const ServicesList = () => {
       </div>
       {store.isDelete && (
         <ModalDelete
-          mysqlApiDelete={`/v1/category/${id}`}
+          mysqlApiDelete={`/v1/services/${id}`}
           msg="Are you sure you want to delete this record?"
-          item={dataItem.category_name}
-          queryKey="category"
+          item={dataItem.service_type}
+          queryKey="services"
         />
       )}
       {store.isConfirm && (
         <ModalArchive
-          mysqlApiArchive={`/v1/category/active/${id}`}
-          item={dataItem.category_name}
-          queryKey="category"
+          mysqlApiArchive={`/v1/services/active/${id}`}
+          item={dataItem.service_type}
+          queryKey="services"
           isActive={isActive}
         />
       )}

@@ -32,7 +32,7 @@ const Services = () => {
                 <BsPlusCircleFill className="md:hidden" /> Add
               </button>
             </div>
-            <ServicesList />
+            <ServicesList setItemEdit={setItemEdit}/>
             <Footer />
           </div>
         </div>
