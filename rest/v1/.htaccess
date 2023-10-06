@@ -1,0 +1,24 @@
+RewriteEngine On
+# use for authentication
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+Header set Access-Control-Allow-Origin *
+ 
+
+#client
+RewriteRule ^client$ controllers/client/client.php [L]
+RewriteRule ^client/([0-9]+)$ controllers/client/client.php?clientid=$1 [L]
+RewriteRule ^client/active/([0-9]+)$ controllers/client/active.php?clientid=$1 [L]
+
+#orders
+RewriteRule ^orders$ controllers/orders/orders.php [L]
+RewriteRule ^orders/([0-9]+)$ controllers/orders/orders.php?orderid=$1 [L]
+RewriteRule ^orders/active/([0-9]+)$ controllers/orders/active.php?orderid=$1 [L]
+
+#services
+RewriteRule ^services$ controllers/settings/services/services.php [L]
+RewriteRule ^services/([0-9]+)$ controllers/settings/services/services.php?servicesid=$1 [L]
+RewriteRule ^services/active/([0-9]+)$ controllers/settings/services/active.php?servicesid=$1 [L]
