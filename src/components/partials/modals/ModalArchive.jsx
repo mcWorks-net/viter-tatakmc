@@ -13,11 +13,14 @@ import { StoreContext } from "@/components/store/StoreContext.jsx";
 
 import { queryData } from "@/components/helpers/queryData.jsx";
 import Modal from "../wrapper/Modal";
+import ButtonSpinner from "../spinners/ButtonSpinner";
 
 const ModalArchive = ({ mysqlApiArchive, item, queryKey, isActive }) => {
   const { dispatch } = React.useContext(StoreContext);
   const queryClient = useQueryClient();
-  let activeValue = isActive;
+  console.log(isActive)
+  let activeValue = isActive; 
+  
 
   const mutation = useMutation({
     mutationFn: (values) => queryData(mysqlApiArchive, "put", values),

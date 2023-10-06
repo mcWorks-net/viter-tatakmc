@@ -1,9 +1,11 @@
+import useQueryData from "@/components/custom-hooks/useQueryData";
 import NoData from "@/components/partials/NoData.jsx";
 import Pills from "@/components/partials/Pills.jsx";
 import ServerError from "@/components/partials/ServerError.jsx";
 import TableLoading from "@/components/partials/TableLoading.jsx";
 import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
 import ModalDelete from "@/components/partials/modals/ModalDelete.jsx";
+import { setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -15,14 +17,56 @@ const ClientsList = () => {
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
 
-  const category = {
-    data: [
-      {
-        id: "1",
-        name: "name",
-      },
-    ],
+
+  
+  let counter = 1;
+
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: clients,
+  } = useQueryData(
+    "/v1/client", // endpoint
+    "get", // method
+    "clients" // key
+  );
+
+    
+  const handleEdit = (item) => {
+    dispatch(setIsAdd(true));
+    setItemEdit(item);
   };
+
+
+  const handleArchive = (item) => {
+    dispatch(setIsConfirm(true));
+    setId(item.client_aid);
+    setData(item);
+    setActive(true)
+  };
+
+  const handleRestore = (item) => {
+    dispatch(setIsConfirm(true));
+    setId(item.client_aid);
+    setData(item);
+    setActive(false)
+  };
+
+  const handleDelete = (item) => {
+    dispatch(setIsDelete(true));
+    setId(item.client_aid);
+    setData(item);
+  };
+
+  // const category = {
+  //   data: [
+  //     {
+  //       id: "1",
+  //       name: "name",
+  //     },
+  //   ],
+  // };
 
   return (
     <>
@@ -31,16 +75,14 @@ const ClientsList = () => {
           <thead>
             <tr>
               <th className="w-[40px]">#</th>
-              <th>Category</th>
-
+              <th>Name</th>
               <th>Status</th>
               <th className="header__action text-right"></th>
             </tr>
           </thead>
 
           <tbody>
-            {/* {(isLoading || category?.data.length === 0) && ( */}
-            {(true || category?.data.length === 0) && (
+            {(isLoading || clients?.data.length === 0) && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
                   {true ? <TableLoading count={20} cols={3} /> : <NoData />}
@@ -48,8 +90,7 @@ const ClientsList = () => {
               </tr>
             )}
 
-            {/* {error && ( */}
-            {true && (
+            {error && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
                   <ServerError />
@@ -57,14 +98,14 @@ const ClientsList = () => {
               </tr>
             )}
 
-            {category?.data.map((item, key) => {
+            {clients?.data.map((item, key) => {
               return (
                 <tr key={key}>
-                  <td>1.</td>
-                  <td>xxxxx</td>
+                  <td>{counter++}</td>
+                  <td>{item.client_name}</td>
 
                   <td>
-                    {true === 1 ? (
+                    {item.client_is_active === 1 ? (
                       <Pills label="Active" />
                     ) : (
                       <Pills bgColor="bg-disable" label="Inactive" />
@@ -74,7 +115,7 @@ const ClientsList = () => {
                     <div className="table__action">
                       <HiDotsHorizontal />
                       <ul className="">
-                        {item.category_is_active === 1 ? (
+                        {item.client_is_active === 1 ? (
                           <>
                             <li className="tooltip" data-tooltip="Edit">
                               <button onClick={() => handleEdit(item)}>
@@ -114,17 +155,17 @@ const ClientsList = () => {
       </div>
       {store.isDelete && (
         <ModalDelete
-          mysqlApiDelete={`/v1/category/${id}`}
+          mysqlApiDelete={`/v1/client/${id}`}
           msg="Are you sure you want to delete this record?"
-          item={dataItem.category_name}
-          queryKey="category"
+          item={dataItem.client_name}
+          queryKey="clients"
         />
       )}
       {store.isConfirm && (
         <ModalArchive
-          mysqlApiArchive={`/v1/category/active/${id}`}
-          item={dataItem.category_name}
-          queryKey="category"
+          mysqlApiArchive={`/v1/client/active/${id}`}
+          item={dataItem.client_name}
+          queryKey="clients"
           isActive={isActive}
         />
       )}

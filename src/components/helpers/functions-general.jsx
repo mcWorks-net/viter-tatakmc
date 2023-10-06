@@ -4,8 +4,8 @@ import { setIsAdd } from "../store/StoreAction.jsx";
 import { StoreContext } from "../store/StoreContext.jsx";
 
 // // Mac
-const urlPathResto = "http://localhost/viter-scc-fbs";
-const imgUrlPathResto = "http://localhost/viter-scc-fbs/public/img";
+const urlPathResto = "http://localhost/viter-tatakmc";
+const imgUrlPathResto = "http://localhost/viter-tatakmc/public/img";
 
 // // Patrick
 // const urlPathLcss = `https://devapp.fbasapp.com`;
