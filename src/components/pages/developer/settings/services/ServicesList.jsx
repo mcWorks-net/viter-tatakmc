@@ -5,13 +5,17 @@ import ServerError from "@/components/partials/ServerError.jsx";
 import TableLoading from "@/components/partials/TableLoading.jsx";
 import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
 import ModalDelete from "@/components/partials/modals/ModalDelete.jsx";
-import { setIsAdd, setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
+import {
+  setIsAdd,
+  setIsConfirm,
+  setIsDelete,
+} from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { MdArchive, MdDelete, MdEdit, MdRestorePage } from "react-icons/md";
 
-const ServicesList = ({setItemEdit}) => {
+const ServicesList = ({ setItemEdit }) => {
   const { store, dispatch } = React.useContext(StoreContext);
   const [dataItem, setData] = React.useState(null);
   const [id, setId] = React.useState(null);
@@ -30,25 +34,23 @@ const ServicesList = ({setItemEdit}) => {
     "services" // key
   );
 
-      
   const handleEdit = (item) => {
     dispatch(setIsAdd(true));
     setItemEdit(item);
   };
 
-
   const handleArchive = (item) => {
     dispatch(setIsConfirm(true));
-    setId(item.service_aid );
+    setId(item.service_aid);
     setData(item);
-    setActive(true)
+    setActive(true);
   };
 
   const handleRestore = (item) => {
     dispatch(setIsConfirm(true));
-    setId(item.service_aid );
+    setId(item.service_aid);
     setData(item);
-    setActive(false)
+    setActive(false);
   };
 
   const handleDelete = (item) => {
@@ -83,7 +85,11 @@ const ServicesList = ({setItemEdit}) => {
             {(isLoading || services?.data.length === 0) && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
-                  {true ? <TableLoading count={20} cols={3} /> : <NoData />}
+                  {isLoading ? (
+                    <TableLoading count={20} cols={3} />
+                  ) : (
+                    <NoData />
+                  )}
                 </td>
               </tr>
             )}

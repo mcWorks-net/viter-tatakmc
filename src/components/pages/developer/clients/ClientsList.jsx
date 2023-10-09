@@ -5,20 +5,22 @@ import ServerError from "@/components/partials/ServerError.jsx";
 import TableLoading from "@/components/partials/TableLoading.jsx";
 import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
 import ModalDelete from "@/components/partials/modals/ModalDelete.jsx";
-import { setIsAdd, setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
+import {
+  setIsAdd,
+  setIsConfirm,
+  setIsDelete,
+} from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { MdArchive, MdDelete, MdEdit, MdRestorePage } from "react-icons/md";
 
-const ClientsList = ({setItemEdit}) => {
+const ClientsList = ({ setItemEdit }) => {
   const { store, dispatch } = React.useContext(StoreContext);
   const [dataItem, setData] = React.useState(null);
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
 
-
-  
   let counter = 1;
 
   const {
@@ -32,25 +34,23 @@ const ClientsList = ({setItemEdit}) => {
     "clients" // key
   );
 
-    
   const handleEdit = (item) => {
     dispatch(setIsAdd(true));
     setItemEdit(item);
   };
 
-
   const handleArchive = (item) => {
     dispatch(setIsConfirm(true));
     setId(item.client_aid);
     setData(item);
-    setActive(true)
+    setActive(true);
   };
 
   const handleRestore = (item) => {
     dispatch(setIsConfirm(true));
     setId(item.client_aid);
     setData(item);
-    setActive(false)
+    setActive(false);
   };
 
   const handleDelete = (item) => {
@@ -85,7 +85,11 @@ const ClientsList = ({setItemEdit}) => {
             {(isLoading || clients?.data.length === 0) && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
-                  {true ? <TableLoading count={20} cols={3} /> : <NoData />}
+                  {isLoading ? (
+                    <TableLoading count={20} cols={3} />
+                  ) : (
+                    <NoData />
+                  )}
                 </td>
               </tr>
             )}
