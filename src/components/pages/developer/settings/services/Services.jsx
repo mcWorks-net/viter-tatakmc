@@ -7,7 +7,7 @@ import { setIsAdd } from "@/components/store/StoreAction.jsx";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import React from "react";
 import { BsPlusCircleFill } from "react-icons/bs";
-import ModalAddService from "./ModalAddService.jsx";
+import ModalAddServiceRHF from "./ModalAddServiceRHF.jsx";
 import ServicesList from "./ServicesList.jsx";
 
 const Services = () => {
@@ -32,12 +32,12 @@ const Services = () => {
                 <BsPlusCircleFill className="md:hidden" /> Add
               </button>
             </div>
-            <ServicesList setItemEdit={setItemEdit}/>
+            <ServicesList setItemEdit={setItemEdit} />
             <Footer />
           </div>
         </div>
       </main>
-      {store.isAdd && <ModalAddService itemEdit={itemEdit} />}
+      {store.isAdd && <ModalAddServiceRHF itemEdit={itemEdit} />}
       {store.validate && <ModalValidate />}
       {store.success && <Toast />}
     </>
