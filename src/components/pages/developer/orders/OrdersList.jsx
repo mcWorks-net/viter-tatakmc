@@ -15,7 +15,9 @@ const OrdersList = () => {
   const [dataItem, setData] = React.useState(null);
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
+
   let counter = 1;
+
   const {
     isLoading,
     isFetching,
@@ -42,14 +44,17 @@ const OrdersList = () => {
           </thead>
 
           <tbody>
-            {(isLoading || orders?.data.length === 0) &&
-              (true || orders?.data.length === 0) && (
-                <tr className="text-center ">
-                  <td colSpan="100%" className="p-10">
-                    {true ? <TableLoading count={20} cols={3} /> : <NoData />}
-                  </td>
-                </tr>
-              )}
+            {(isLoading || orders?.data.length === 0) && (
+              <tr className="text-center ">
+                <td colSpan="100%" className="p-10">
+                  {isLoading ? (
+                    <TableLoading count={20} cols={3} />
+                  ) : (
+                    <NoData />
+                  )}
+                </td>
+              </tr>
+            )}
 
             {error && (
               <tr className="text-center ">
@@ -66,7 +71,7 @@ const OrdersList = () => {
                   <td>{item.client_name}</td>
 
                   <td>
-                    {true === 1 ? (
+                    {item.order_is_active === 1 ? (
                       <Pills label="Active" />
                     ) : (
                       <Pills bgColor="bg-disable" label="Inactive" />
@@ -76,7 +81,7 @@ const OrdersList = () => {
                     <div className="table__action">
                       <HiDotsHorizontal />
                       <ul className="">
-                        {item.category_is_active === 1 ? (
+                        {item.order_is_active === 1 ? (
                           <>
                             <li className="tooltip" data-tooltip="Edit">
                               <button onClick={() => handleEdit(item)}>

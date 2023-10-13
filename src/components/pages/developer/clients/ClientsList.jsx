@@ -94,7 +94,11 @@ const ClientsList = ({ setItemEdit }) => {
             {(isLoading || clients?.data.length === 0) && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
-                  {true ? <TableLoading count={20} cols={3} /> : <NoData />}
+                  {isLoading ? (
+                    <TableLoading count={20} cols={3} />
+                  ) : (
+                    <NoData />
+                  )}
                 </td>
               </tr>
             )}
