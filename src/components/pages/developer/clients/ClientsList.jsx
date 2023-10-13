@@ -1,24 +1,35 @@
 import useQueryData from "@/components/custom-hooks/useQueryData";
+import { devNavUrl } from "@/components/helpers/functions-general";
 import NoData from "@/components/partials/NoData.jsx";
 import Pills from "@/components/partials/Pills.jsx";
 import ServerError from "@/components/partials/ServerError.jsx";
 import TableLoading from "@/components/partials/TableLoading.jsx";
 import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
 import ModalDelete from "@/components/partials/modals/ModalDelete.jsx";
-import { setIsAdd, setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
+import {
+  setIsAdd,
+  setIsConfirm,
+  setIsDelete,
+} from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
-import { MdArchive, MdDelete, MdEdit, MdRestorePage } from "react-icons/md";
+import {
+  MdArchive,
+  MdDelete,
+  MdEdit,
+  MdPreview,
+  MdRestorePage,
+  MdVibration,
+} from "react-icons/md";
+import { Link } from "react-router-dom";
 
-const ClientsList = ({setItemEdit}) => {
+const ClientsList = ({ setItemEdit }) => {
   const { store, dispatch } = React.useContext(StoreContext);
   const [dataItem, setData] = React.useState(null);
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
 
-
-  
   let counter = 1;
 
   const {
@@ -32,25 +43,23 @@ const ClientsList = ({setItemEdit}) => {
     "clients" // key
   );
 
-    
   const handleEdit = (item) => {
     dispatch(setIsAdd(true));
     setItemEdit(item);
   };
 
-
   const handleArchive = (item) => {
     dispatch(setIsConfirm(true));
     setId(item.client_aid);
     setData(item);
-    setActive(true)
+    setActive(true);
   };
 
   const handleRestore = (item) => {
     dispatch(setIsConfirm(true));
     setId(item.client_aid);
     setData(item);
-    setActive(false)
+    setActive(false);
   };
 
   const handleDelete = (item) => {
@@ -117,6 +126,15 @@ const ClientsList = ({setItemEdit}) => {
                       <ul className="">
                         {item.client_is_active === 1 ? (
                           <>
+                            <li className="tooltip" data-tooltip="Edit">
+                              <Link
+                                to={`${devNavUrl}/clients/profile`}
+                                className="text-2xl text-black"
+                              >
+                                <MdPreview />
+                              </Link>
+                            </li>
+
                             <li className="tooltip" data-tooltip="Edit">
                               <button onClick={() => handleEdit(item)}>
                                 <MdEdit />

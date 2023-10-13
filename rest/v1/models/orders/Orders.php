@@ -35,8 +35,7 @@ class Orders
     public function readAll()
       {
         try {
-          $sql = "select ";
-          $sql .= "client.client_name ";
+          $sql = "select * ";
           $sql .= "from {$this->tblOrders} as orders, ";
           $sql .= "{$this->tblClient} as client, ";
           $sql .= "{$this->tblServices} as services ";
@@ -51,7 +50,7 @@ class Orders
         return $query;
       }
 
-      public function create()
+  public function create()
   {
     try {
       $sql = "insert into {$this->tblOrders} ";
