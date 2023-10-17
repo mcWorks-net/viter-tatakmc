@@ -23,12 +23,14 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
 
   const [clientId, setClientId] = React.useState(null);
 
+  console.log(itemEdit);
 
+ 
   const mutation = useMutation({
     mutationFn: (values) =>
       queryData(
         itemEdit
-          ? `/v1/orders/${itemEdit.client_class_aid}`
+          ? `/v1/orders/${itemEdit.order_aid}`
           : "/v1/orders",
         itemEdit ? "put" : "post",
         values
@@ -50,13 +52,19 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
   });
 
   const initVal = {
-    client_class_aid: itemEdit ? itemEdit.client_class_aid : "",
-    client_class_name: itemEdit ? itemEdit.client_class_name : "",
-    client_class_name_old: itemEdit ? itemEdit.client_class_name : "",
+    order_client_id: itemEdit ? itemEdit.order_client_id : "",
+    order_service_id: itemEdit ? itemEdit.order_service_id : "",
+    order_price: itemEdit ? itemEdit.order_price : "",
+    order_quantity: itemEdit ? itemEdit.order_quantity : "",
+    order_payment_status: itemEdit ? itemEdit.order_payment_status : "",
   };
 
   const yupSchema = Yup.object({
-    client_class_name: Yup.string().required("Required"),
+    order_service_id: Yup.string().required("Required"),
+    order_client_id: Yup.string().required("Required"),
+    order_price: Yup.string().required("Required"),
+    order_quantity: Yup.string().required("Required"),
+    order_payment_status: Yup.string().required("Required"),
   });
 
   const handleClose = () => {
@@ -86,7 +94,8 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
             validationSchema={yupSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
               // mutate data
-              mutation.mutate(values);
+              console.log(values)
+              mutation.mutate({...values, order_status:"Pending"});
             }}
           >
             {(props) => {
@@ -94,21 +103,13 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
                 <Form>
                   <div className="modal__body">
                     <div className="form__wrap">
-                      <InputText
-                        label="Service Name"
-                        type="text"
-                        name="client_class_name"
-                        disabled={mutation.isLoading}
-                      />
-                    </div>
-                    <div className="form__wrap">
                     <InputSelect
                     label="Service Type"
-                    name="product_category_id"
-                    disabled={mutation.isLoading}
+                    name="order_service_id"
+                    disabled={itemEdit || mutation.isLoading ? true : false}
                     onChange={(e) => handleChangeSelect(e)}
                   >
-                    <optgroup label="Select Category">
+                    <optgroup label="Select Client">
                       <option value="" hidden></option>
                       {services.data.length > 0 ? (
                         services.data.map((item, key) => (
@@ -129,8 +130,8 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
                     <div className="form__wrap">
                     <InputSelect
                     label="Client"
-                    name="product_category_id"
-                    disabled={mutation.isLoading}
+                    name="order_client_id"
+                    disabled={itemEdit || mutation.isLoading ? true : false}
                     onChange={(e) => handleChangeSelectClient(e)}
                   >
                     <optgroup label="Select Category">
@@ -150,6 +151,30 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
                       )}
                     </optgroup>
                   </InputSelect>
+                    </div>
+                    <div className="form__wrap">
+                      <InputText
+                        label="Price"
+                        type="text"
+                        name="order_price"
+                        disabled={mutation.isLoading}
+                      />
+                    </div>
+                    <div className="form__wrap">
+                      <InputText
+                        label="Order Quantity"
+                        type="text"
+                        name="order_quantity"
+                        disabled={mutation.isLoading}
+                      />
+                    </div>
+                    <div className="form__wrap">
+                      <InputText
+                        label="Payment Type"
+                        type="text"
+                        name="order_payment_status"
+                        disabled={mutation.isLoading}
+                      />
                     </div>
                     <div className="modal__action flex justify-end mt-6 gap-2">
                       <button

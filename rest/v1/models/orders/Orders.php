@@ -37,7 +37,16 @@ class Orders
         try {
           $sql = "select ";
           $sql .= "client.client_name, ";
-          $sql .= "client.client_email ";
+          $sql .= "client.client_email, ";
+          $sql .= "services.service_type, ";
+          $sql .= "orders.order_aid, ";
+          $sql .= "orders.order_is_active, ";
+          $sql .= "orders.order_service_id, ";
+          $sql .= "orders.order_client_id, ";
+          $sql .= "orders.order_status, ";
+          $sql .= "orders.order_price, ";
+          $sql .= "orders.order_quantity, ";
+          $sql .= "orders.order_payment_status ";
           $sql .= "from {$this->tblOrders} as orders, ";
           $sql .= "{$this->tblClient} as client, ";
           $sql .= "{$this->tblServices} as services ";
@@ -60,6 +69,7 @@ class Orders
       $sql .= "order_service_id, ";
       $sql .= "order_status, ";
       $sql .= "order_price, ";
+      $sql .= "order_quantity, ";
       $sql .= "order_payment_status, ";
       $sql .= "order_client_id, ";
       $sql .= "order_created, ";
@@ -68,6 +78,7 @@ class Orders
       $sql .= ":order_service_id, ";
       $sql .= ":order_status, ";
       $sql .= ":order_price, ";
+      $sql .= ":order_quantity, ";
       $sql .= ":order_payment_status, ";
       $sql .= ":order_client_id, ";
       $sql .= ":order_created, ";
@@ -78,6 +89,7 @@ class Orders
         "order_service_id" => $this->order_service_id,
         "order_status" => $this->order_status,
         "order_price" => $this->order_price,
+        "order_quantity" => $this->order_quantity,
         "order_payment_status" => $this->order_payment_status,
         "order_client_id" => $this->order_client_id,
         "order_created" => $this->order_created,
@@ -94,22 +106,16 @@ class Orders
   {
     try {
       $sql = "update {$this->tblOrders} set ";
-      $sql .= "order_service_id = :order_service_id, ";
-      $sql .= "order_status = :order_status, ";
       $sql .= "order_price = :order_price, ";
+      $sql .= "order_quantity = :order_quantity, ";
       $sql .= "order_payment_status = :order_payment_status, ";
-      $sql .= "order_client_id = :order_client_id, ";
-      $sql .= "order_created = :order_created, ";
       $sql .= "order_datetime = :order_datetime ";
       $sql .= "where order_aid = :order_aid ";
       $query = $this->connection->prepare($sql);
       $query->execute([
-        "order_service_id" => $this->order_service_id,
-        "order_status" => $this->order_status,
         "order_price" => $this->order_price,
+        "order_quantity" => $this->order_quantity,
         "order_payment_status" => $this->order_payment_status,
-        "order_client_id" => $this->order_client_id,
-        "order_created" => $this->order_created,
         "order_datetime" => $this->order_datetime,
         "order_aid" => $this->order_aid
       ]);

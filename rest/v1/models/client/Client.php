@@ -13,9 +13,9 @@ class Client
 
     public $connection;
     public $lastInsertedId;
-    public $emp_start;
-    public $emp_total;
-    public $emp_search;
+    public $client_start;
+    public $client_total;
+    public $client_search;
 
     public $tblActivities;
 
@@ -37,6 +37,39 @@ class Client
           $query = false;
         }
         return $query;
+      }
+
+      public function readLimit()
+      {
+        try {
+          $sql = "select * from {$this->tblClient} ";
+          $sql .= "order by client_is_active desc, ";
+          $sql .= "client_aid asc ";
+          $sql .= "limit :start, ";
+          $sql .= ":total ";
+          $query = $this->connection->prepare($sql);
+          $query->execute([
+              "start" => $this->client_start - 1,
+              "total" => $this->client_total,
+          ]);
+      } catch (PDOException $ex) {
+          $query = false;
+      }
+      return $query;
+  }
+      public function readById()
+      {
+          try {
+              $sql = "select * from {$this->tblClient} ";
+              $sql .= "where client_aid = :client_aid ";
+              $query = $this->connection->prepare($sql);
+              $query->execute([
+                  "client_aid" => $this->client_aid,
+              ]);
+          } catch (PDOException $ex) {
+              $query = false;
+          }
+          return $query;
       }
 
       public function create()
@@ -134,5 +167,24 @@ class Client
     }
     return $query;
   }
+
+
+  public function search()
+    {
+        try {
+            $sql = "select * ";
+            $sql .= "from {$this->tblClient} ";
+            $sql .= "where client_name like :client_name ";
+            $sql .= "order by client_is_active desc, ";
+            $sql .= "client_aid asc ";
+            $query = $this->connection->prepare($sql);
+            $query->execute([
+                "client_name" => "%{$this->client_search}%",
+            ]);
+        } catch (PDOException $ex) {
+            $query = false;
+        }
+        return $query;
+    }
 
 }

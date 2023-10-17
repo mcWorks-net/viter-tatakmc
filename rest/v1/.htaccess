@@ -11,6 +11,8 @@ Header set Access-Control-Allow-Origin *
 RewriteRule ^client$ controllers/client/client.php [L]
 RewriteRule ^client/([0-9]+)$ controllers/client/client.php?clientid=$1 [L]
 RewriteRule ^client/active/([0-9]+)$ controllers/client/active.php?clientid=$1 [L]
+RewriteRule ^client/page/([0-9]+)$ controllers/client/page.php?start=$1 [L]
+RewriteRule ^client/search$ controllers/client/search.php [L]
 
 #orders
 RewriteRule ^orders$ controllers/orders/orders.php [L]

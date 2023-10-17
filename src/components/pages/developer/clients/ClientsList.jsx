@@ -1,7 +1,10 @@
 import useQueryData from "@/components/custom-hooks/useQueryData";
 import { devNavUrl } from "@/components/helpers/functions-general";
+import { queryDataInfinite } from "@/components/helpers/queryDataInfinite";
+import Loadmore from "@/components/partials/Loadmore";
 import NoData from "@/components/partials/NoData.jsx";
 import Pills from "@/components/partials/Pills.jsx";
+import SearchBar from "@/components/partials/SearchBar";
 import ServerError from "@/components/partials/ServerError.jsx";
 import TableLoading from "@/components/partials/TableLoading.jsx";
 import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
@@ -12,6 +15,7 @@ import {
   setIsDelete,
 } from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import {
@@ -30,18 +34,40 @@ const ClientsList = ({ setItemEdit }) => {
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
 
+
+  const [isDel, setDel] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const search = React.useRef({ value: "" });
+
   let counter = 1;
 
   const {
-    isLoading,
-    isFetching,
+    data: result,
     error,
-    data: clients,
-  } = useQueryData(
-    "/v1/client", // endpoint
-    "get", // method
-    "clients" // key
-  );
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ["client", search.current.value, store.isSearch],
+    queryFn: async ({ pageParam = 1 }) =>
+      await queryDataInfinite(
+        `/v1/client/search`, // search endpoint
+        `/v1/client/page/${pageParam}`, // list endpoint
+        store.isSearch, // search boolean
+        "post",
+        { search: search.current.value }
+      ),
+    getNextPageParam: (lastPage) => {
+     
+      if (lastPage.page < lastPage.total) {
+        return lastPage.page + lastPage.count;
+      }
+      return;
+    },
+    refetchOnWindowFocus: true,
+  });
 
   const handleEdit = (item) => {
     dispatch(setIsAdd(true));
@@ -79,6 +105,13 @@ const ClientsList = ({ setItemEdit }) => {
 
   return (
     <>
+      <SearchBar 
+        search={search}
+        dispatch={dispatch}
+        store={store}
+        result={result?.pages}
+        isFetching={isFetching}
+      />
       <div className="table__wrapper bg-white p-2 rounded-md ">
         <table>
           <thead>
@@ -91,17 +124,18 @@ const ClientsList = ({ setItemEdit }) => {
           </thead>
 
           <tbody>
-            {(isLoading || clients?.data.length === 0) && (
-              <tr className="text-center ">
-                <td colSpan="100%" className="p-10">
-                  {isLoading ? (
-                    <TableLoading count={20} cols={3} />
-                  ) : (
-                    <NoData />
-                  )}
-                </td>
-              </tr>
-            )}
+          {(status === "loading" ||
+                  result?.pages[0].data.length === 0) && (
+                  <tr className="text-center ">
+                    <td colSpan="100%" className="p-2 md:p-10">
+                      {status === "loading" ? (
+                        <TableLoading count={20} cols={3} />
+                      ) : (
+                        <NoData />
+                      )}
+                    </td>
+                  </tr>
+                )}
 
             {error && (
               <tr className="text-center ">
@@ -111,8 +145,10 @@ const ClientsList = ({ setItemEdit }) => {
               </tr>
             )}
 
-            {clients?.data.map((item, key) => {
-              return (
+            {result?.pages.map((page, key) => (
+                  <React.Fragment key={key}>
+                    {page.data.map((item, key) => {
+                      return (
                 <tr key={key}>
                   <td>{counter++}</td>
                   <td>{item.client_name}</td>
@@ -132,7 +168,7 @@ const ClientsList = ({ setItemEdit }) => {
                           <>
                             <li className="tooltip" data-tooltip="Edit">
                               <Link
-                                to={`${devNavUrl}/clients/profile`}
+                                to={`${devNavUrl}/clients/profile?id=${item.client_aid}`}
                                 className="text-2xl text-black"
                               >
                                 <MdPreview />
@@ -170,10 +206,22 @@ const ClientsList = ({ setItemEdit }) => {
                     </div>
                   </td>
                 </tr>
-              );
-            })}
+            );
+          })}
+        </React.Fragment>
+      ))}
           </tbody>
         </table>
+      </div>
+      <div className="loadmore flex justify-center flex-col items-center pb-10">
+            <Loadmore
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              hasNextPage={hasNextPage}
+              result={result?.pages[0]}
+              setPage={setPage}
+              page={page}
+            />
       </div>
       {store.isDelete && (
         <ModalDelete

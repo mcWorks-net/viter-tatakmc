@@ -15,6 +15,7 @@ $orders->order_is_active = 1;
 $orders->order_service_id = checkIndex($data, "order_service_id");
 $orders->order_status = checkIndex($data, "order_status");
 $orders->order_price = checkIndex($data, "order_price");
+$orders->order_quantity = checkIndex($data, "order_quantity");
 $orders->order_payment_status = checkIndex($data, "order_payment_status");
 $orders->order_client_id = checkIndex($data, "order_client_id");
 $orders->order_created = date("Y-m-d H:i:s");
