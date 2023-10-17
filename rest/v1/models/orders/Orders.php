@@ -52,7 +52,7 @@ class Orders
         return $query;
       }
 
-      public function create()
+  public function create()
   {
     try {
       $sql = "insert into {$this->tblOrders} ";

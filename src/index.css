@@ -155,7 +155,7 @@
 
 @layer components {
   .btn {
-    @apply py-2 px-4 rounded-md  transition-ease active:scale-95 min-w-[80px] flex gap-2 items-center justify-center;
+    @apply h-[42px] p-2.5 rounded-md  transition-ease active:scale-95 min-w-[80px] flex gap-2 items-center justify-center;
   }
 
   .btn--sm {

@@ -16,6 +16,7 @@ const OrdersList = () => {
   const [id, setId] = React.useState(null);
   const [isActive, setActive] = React.useState(null);
 
+  let counter = 1;
 
   return (
     <>
@@ -24,7 +25,7 @@ const OrdersList = () => {
           <thead>
             <tr>
               <th className="w-[40px]">#</th>
-              <th>Category</th>
+              <th>Client Name</th>
 
               <th>Status</th>
               <th className="header__action text-right"></th>
@@ -32,16 +33,19 @@ const OrdersList = () => {
           </thead>
 
           <tbody>
-            {/* {(isLoading || category?.data.length === 0) && ( */}
-            {/* {(true || category?.data.length === 0) && (
+            {(isLoading || orders?.data.length === 0) && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
-                  {true ? <TableLoading count={20} cols={3} /> : <NoData />}
+                  {isLoading ? (
+                    <TableLoading count={20} cols={3} />
+                  ) : (
+                    <NoData />
+                  )}
                 </td>
               </tr>
-            )} */}
+            )}
 
-            {true && (
+            {error && (
               <tr className="text-center ">
                 <td colSpan="100%" className="p-10">
                   <ServerError />
@@ -49,14 +53,14 @@ const OrdersList = () => {
               </tr>
             )}
 
-            {/* {category?.data.map((item, key) => {
+            {orders?.data.map((item, key) => {
               return (
                 <tr key={key}>
-                  <td>1.</td>
-                  <td>xxxxx</td>
+                  <td>{counter++}</td>
+                  <td>{item.client_name}</td>
 
                   <td>
-                    {true === 1 ? (
+                    {item.order_is_active === 1 ? (
                       <Pills label="Active" />
                     ) : (
                       <Pills bgColor="bg-disable" label="Inactive" />
@@ -66,7 +70,7 @@ const OrdersList = () => {
                     <div className="table__action">
                       <HiDotsHorizontal />
                       <ul className="">
-                        {item.category_is_active === 1 ? (
+                        {item.order_is_active === 1 ? (
                           <>
                             <li className="tooltip" data-tooltip="Edit">
                               <button onClick={() => handleEdit(item)}>
@@ -100,7 +104,7 @@ const OrdersList = () => {
                   </td>
                 </tr>
               );
-            })} */}
+            })}
           </tbody>
         </table>
       </div>
