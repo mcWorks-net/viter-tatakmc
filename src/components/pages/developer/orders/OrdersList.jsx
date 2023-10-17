@@ -17,18 +17,6 @@ const OrdersList = () => {
   const [isActive, setActive] = React.useState(null);
 
 
-  const {
-    isLoading,
-    isFetching,
-    error,
-    data: services,
-  } = useQueryData(
-    "/v1/services", // endpoint
-    "get", // method
-    "services" // key
-  );
-
-  console.log(services);
   return (
     <>
       <div className="table__wrapper bg-white p-2 rounded-md ">

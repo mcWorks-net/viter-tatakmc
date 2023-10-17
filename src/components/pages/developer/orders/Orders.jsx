@@ -34,11 +34,6 @@ const Orders = () => {
     "client" // key
   );
 
-
-
-
-  
-
   const handleAdd = () => {
     dispatch(setIsAdd(true));
     setItemEdit(null);
@@ -57,7 +52,7 @@ const Orders = () => {
                 <BsPlusCircleFill className="md:hidden" /> Add
               </button>
             </div>
-            <OrdersList />
+            <OrdersList setItemEdit={setItemEdit}/>
             <Footer />
           </div>
         </div>

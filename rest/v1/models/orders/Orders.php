@@ -36,7 +36,8 @@ class Orders
       {
         try {
           $sql = "select ";
-          $sql .= "client.client_name ";
+          $sql .= "client.client_name, ";
+          $sql .= "client.client_email ";
           $sql .= "from {$this->tblOrders} as orders, ";
           $sql .= "{$this->tblClient} as client, ";
           $sql .= "{$this->tblServices} as services ";

@@ -28,14 +28,14 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
     mutationFn: (values) =>
       queryData(
         itemEdit
-          ? `/v1/client-class/${itemEdit.client_class_aid}`
-          : "/v1/client-class",
+          ? `/v1/orders/${itemEdit.client_class_aid}`
+          : "/v1/orders",
         itemEdit ? "put" : "post",
         values
       ),
     onSuccess: (data) => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["client-class"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
       if (data.success) {
         dispatch(setIsAdd(false));
         dispatch(setSuccess(true));
