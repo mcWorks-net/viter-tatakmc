@@ -13,6 +13,7 @@ checkPayload($data);
 // get data
 $services->service_is_active = 1;
 $services->service_type = checkIndex($data, "service_type");
+$services->service_cost = checkIndex($data, "service_cost");
 $services->service_created = date("Y-m-d H:i:s");
 $services->service_datetime = date("Y-m-d H:i:s");
 // string value convert to lower case

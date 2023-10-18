@@ -47,11 +47,13 @@ const ModalAddService = ({ itemEdit }) => {
   const initVal = {
     service_aid : itemEdit ? itemEdit.service_aid : "",
     service_type: itemEdit ? itemEdit.service_type : "",
+    service_cost: itemEdit ? itemEdit.service_cost : "",
     service_type_old: itemEdit ? itemEdit.service_type : "",
   };
 
   const yupSchema = Yup.object({
     service_type: Yup.string().required("Required"),
+    service_cost: Yup.string().required("Required"),
   });
 
   const handleClose = () => {
@@ -88,7 +90,14 @@ const ModalAddService = ({ itemEdit }) => {
                         disabled={mutation.isLoading}
                       />
                     </div>
-
+                    <div className="form__wrap">
+                      <InputText
+                        label="Service Cost"
+                        type="text"
+                        name="service_cost"
+                        disabled={mutation.isLoading}
+                      />
+                    </div>
                     <div className="modal__action flex justify-end mt-6 gap-2">
                       <button
                         className="btn btn--accent"

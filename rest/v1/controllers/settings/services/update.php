@@ -14,6 +14,7 @@ if (array_key_exists("servicesid", $_GET)) {
   // get data
   $services->service_aid = $_GET['servicesid'];
   $services->service_type = checkIndex($data, "service_type");
+  $services->service_cost = checkIndex($data, "service_cost");
   $services->service_created = date("Y-m-d H:i:s");
   checkId($services->service_aid);
   // update

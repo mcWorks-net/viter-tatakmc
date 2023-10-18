@@ -39,6 +39,7 @@ class Orders
           $sql .= "client.client_name, ";
           $sql .= "client.client_email, ";
           $sql .= "services.service_type, ";
+          $sql .= "services.service_cost, ";
           $sql .= "orders.order_aid, ";
           $sql .= "orders.order_is_active, ";
           $sql .= "orders.order_service_id, ";

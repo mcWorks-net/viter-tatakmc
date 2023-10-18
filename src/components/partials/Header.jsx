@@ -5,7 +5,7 @@ const Header = () => {
     <>
       <header className="py-2 px-4 bg-accent relative">
         <div className="flex justify-between items-center">
-          <h3>TATAKMC</h3>
+          <h3 className="text-white">TATAKMC</h3>
         </div>
       </header>
     </>

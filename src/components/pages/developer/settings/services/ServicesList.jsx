@@ -76,6 +76,7 @@ const ServicesList = ({ setItemEdit }) => {
             <tr>
               <th className="w-[40px]">#</th>
               <th>Service Name</th>
+              <th className="text-center">Servie Cost</th>
               <th>Status</th>
               <th className="header__action text-right"></th>
             </tr>
@@ -107,7 +108,7 @@ const ServicesList = ({ setItemEdit }) => {
                 <tr key={key}>
                   <td>{counter++}</td>
                   <td>{item.service_type}</td>
-
+                  <td className="text-center">{item.service_cost}</td>
                   <td>
                     {item.service_is_active === 1 ? (
                       <Pills label="Active" />

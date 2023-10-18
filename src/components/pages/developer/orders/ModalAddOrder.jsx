@@ -1,4 +1,6 @@
+import useQueryData from "@/components/custom-hooks/useQueryData";
 import { InputSelect, InputText } from "@/components/helpers/FormInputs.jsx";
+import { consoleLog } from "@/components/helpers/functions-general";
 import { queryData } from "@/components/helpers/queryData.jsx";
 import ButtonSpinner from "@/components/partials/spinners/ButtonSpinner.jsx";
 import Modal from "@/components/partials/wrapper/Modal.jsx";
@@ -10,6 +12,7 @@ import {
 } from "@/components/store/StoreAction.jsx";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { data } from "autoprefixer";
 import { Form, Formik } from "formik";
 import React from "react";
 import { FaTimes } from "react-icons/fa";
@@ -19,11 +22,14 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
   const { dispatch } = React.useContext(StoreContext);
   const queryClient = useQueryClient();
 
-  const [serviceId, setServiceId] = React.useState(null);
 
+  const [serviceId, setServiceId] = React.useState(null);
   const [clientId, setClientId] = React.useState(null);
 
-  console.log(itemEdit);
+  const [selectedService, setSelectedService] = React.useState([])
+
+
+
 
  
   const mutation = useMutation({
@@ -38,6 +44,7 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
     onSuccess: (data) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["orders"] });
+      console.log(data.success)
       if (data.success) {
         dispatch(setIsAdd(false));
         dispatch(setSuccess(true));
@@ -62,7 +69,7 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
   const yupSchema = Yup.object({
     order_service_id: Yup.string().required("Required"),
     order_client_id: Yup.string().required("Required"),
-    order_price: Yup.string().required("Required"),
+    // order_price: Yup.string().required("Required"),
     order_quantity: Yup.string().required("Required"),
     order_payment_status: Yup.string().required("Required"),
   });
@@ -70,14 +77,23 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
   const handleClose = () => {
     dispatch(setIsAdd(false));
   };
+  
+    
+  const [serviceCost , setServiceCost] = React.useState(null)
+    const handleChangeSelect = (e) => {
+       setServiceCost(e.target.options[e.target.selectedIndex].getAttribute('data-price'))
+  }
 
-  const handleChangeSelect = (e) => {
-    setServiceId(e.target.options[e.target.selectedIndex].value);
-  };
 
   const handleChangeSelectClient = (e) => {
     setClientId(e.target.options[e.target.selectedIndex].value);
   };
+
+  const [quantity , setQuantity] = React.useState("");
+  const handleQuantity = (event) => {
+    setQuantity(event.target.value);
+  }
+
 
   return (
     <>
@@ -109,7 +125,7 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
                     disabled={itemEdit || mutation.isLoading ? true : false}
                     onChange={(e) => handleChangeSelect(e)}
                   >
-                    <optgroup label="Select Client">
+                    <optgroup label="Service Type">
                       <option value="" hidden></option>
                       {services.data.length > 0 ? (
                         services.data.map((item, key) => (
@@ -117,6 +133,7 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
                             key={key}
                             value={item.service_aid}
                             title={item.service_type}
+                            data-price={item.service_cost}
                           >
                             {item.service_type}
                           </option>
@@ -154,19 +171,23 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
                     </div>
                     <div className="form__wrap">
                       <InputText
-                        label="Price"
-                        type="text"
-                        name="order_price"
-                        disabled={mutation.isLoading}
-                      />
-                    </div>
-                    <div className="form__wrap">
-                      <InputText
                         label="Order Quantity"
                         type="text"
                         name="order_quantity"
                         disabled={mutation.isLoading}
+                        onChange= {handleQuantity}
+                        value = {quantity}
                       />
+                    </div>
+                    <div className="form__wrap">
+                      <InputText
+                        label="Price"
+                        type="text"
+                        name="order_price"
+                        disabled={true}
+                        value={serviceCost*quantity}
+                      />
+                      
                     </div>
                     <div className="form__wrap">
                       <InputText
