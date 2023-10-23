@@ -7,6 +7,7 @@ import ModalArchive from "@/components/partials/modals/ModalArchive.jsx";
 import ModalDelete from "@/components/partials/modals/ModalDelete.jsx";
 import { setIsAdd, setIsConfirm, setIsDelete } from "@/components/store/StoreAction";
 import { StoreContext } from "@/components/store/StoreContext.jsx";
+import { data } from "autoprefixer";
 import React from "react";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { MdArchive, MdDelete, MdEdit, MdRestorePage } from "react-icons/md";
@@ -57,6 +58,15 @@ const OrdersList = ({setItemEdit}) => {
     setData(item);
   };
 
+  const seperateDateAndTime = (theDate) =>{
+    const [date , time] = theDate.split(/ /);
+    const sliceDate = date.split(/-/);
+    const year = sliceDate[0];
+    const month = sliceDate[1];
+    const day = sliceDate[2];
+    return `${month}-${day}-${year}`;
+  }
+
   return (
     <>
       <div className="table__wrapper bg-white p-2 rounded-md ">
@@ -64,6 +74,7 @@ const OrdersList = ({setItemEdit}) => {
           <thead>
             <tr>
               <th className="w-[40px]">#</th>
+              <th>Order Date</th>
               <th>Client Name</th>
               <th>Email</th>
               <th>Order Status</th>
@@ -101,6 +112,7 @@ const OrdersList = ({setItemEdit}) => {
               return (
                 <tr key={key}>
                   <td>{counter++}</td>
+                  <td>{seperateDateAndTime(item.order_created)}</td>
                   <td>{item.client_name}</td>
                   <td>{item.client_email}</td>
                   <td>{item.order_status}</td>

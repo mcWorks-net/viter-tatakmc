@@ -89,10 +89,10 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
     setClientId(e.target.options[e.target.selectedIndex].value);
   };
 
-  const [quantity , setQuantity] = React.useState("");
-  const handleQuantity = (event) => {
-    setQuantity(event.target.value);
-  }
+  // const [quantity , setQuantity] = React.useState("");
+  // const handleQuantity = (event) => {
+  //   setQuantity(event.target.value);
+  // }
 
 
   return (
@@ -115,6 +115,7 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
             }}
           >
             {(props) => {
+              props.values.order_price = serviceCost;
               return (
                 <Form>
                   <div className="modal__body">
@@ -175,19 +176,18 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
                         type="text"
                         name="order_quantity"
                         disabled={mutation.isLoading}
-                        onChange= {handleQuantity}
-                        value = {quantity}
+                        // onChange= {handleQuantity}
+                        // value = {quantity}
                       />
                     </div>
                     <div className="form__wrap">
                       <InputText
-                        label="Price"
+                        label="Price Per/Piece"
                         type="text"
                         name="order_price"
                         disabled={true}
-                        value={serviceCost*quantity}
+                        // value={serviceCost}
                       />
-                      
                     </div>
                     <div className="form__wrap">
                       <InputText
