@@ -86,19 +86,23 @@ class Product
   public function update()
   {
     try {
-      $sql = "update {$this->tblOrders} set ";
-      $sql .= "order_price = :order_price, ";
-      $sql .= "order_quantity = :order_quantity, ";
-      $sql .= "order_payment_status = :order_payment_status, ";
-      $sql .= "order_datetime = :order_datetime ";
-      $sql .= "where order_aid = :order_aid ";
+      $sql = "update {$this->tbl_product} set ";
+      $sql .= "product_category = :product_category, ";
+      $sql .= "product_description = :product_description, ";
+      $sql .= "product_price = :product_price, ";
+      $sql .= "product_quantity = :product_quantity, ";
+      $sql .= "product_brand = :product_brand, ";
+      $sql .= "product_datetime = :product_datetime ";
+      $sql .= "where product_aid = :product_aid ";
       $query = $this->connection->prepare($sql);
       $query->execute([
-        "order_price" => $this->order_price,
-        "order_quantity" => $this->order_quantity,
-        "order_payment_status" => $this->order_payment_status,
-        "order_datetime" => $this->order_datetime,
-        "order_aid" => $this->order_aid
+        "product_category" => $this->product_category,
+        "product_description" => $this->product_description,
+        "product_price" => $this->product_price,
+        "product_quantity" => $this->product_quantity,
+        "product_brand" => $this->product_brand,
+        "product_datetime" => $this->product_datetime,
+        "product_aid" => $this->product_aid
       ]);
     } catch (PDOException $ex) {
       $query = false;
@@ -109,11 +113,11 @@ class Product
   public function delete()
   {
     try {
-      $sql = "delete from {$this->tblOrders} ";
-      $sql .= "where order_aid = :order_aid ";
+      $sql = "delete from {$this->tbl_product} ";
+      $sql .= "where product_aid = :product_aid ";
       $query = $this->connection->prepare($sql);
       $query->execute([
-        "order_aid" => $this->order_aid,
+        "product_aid" => $this->product_aid,
       ]);
     } catch (PDOException $ex) {
       $query = false;
@@ -124,15 +128,15 @@ class Product
   public function active()
     {
     try {
-    $sql = "update {$this->tblOrders} set ";
-    $sql .= "order_is_active = :order_is_active, ";
-    $sql .= "order_datetime = :order_datetime ";
-    $sql .= "where order_aid = :order_aid ";
+    $sql = "update {$this->tbl_product} set ";
+    $sql .= "product_is_active = :product_is_active, ";
+    $sql .= "product_datetime = :product_datetime ";
+    $sql .= "where product_aid = :product_aid ";
     $query = $this->connection->prepare($sql);
     $query->execute([
-    "order_is_active" => $this->order_is_active,
-    "order_datetime" => $this->order_datetime,
-    "order_aid" => $this->order_aid,
+    "product_is_active" => $this->product_is_active,
+    "product_datetime" => $this->product_datetime,
+    "product_aid" => $this->product_aid,
     ]);
     } catch (PDOException $ex) {
     $query = false;

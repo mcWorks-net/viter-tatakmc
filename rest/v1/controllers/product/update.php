@@ -4,25 +4,25 @@
 $conn = null;
 $conn = checkDbConnection();
 // make instance of classes
-$client = new Client($conn);
+$product = new Product($conn);
 // get $_GET data
 $error = [];
 $returnData = [];
-if (array_key_exists("clientid", $_GET)) {
+if (array_key_exists("productid", $_GET)) {
   // check data
   checkPayload($data);
   // get data
-  $client->client_aid = $_GET['clientid'];
-  $client->client_name = checkIndex($data, "client_name");
-  $client->client_email = checkIndex($data, "client_email");
-  $client->client_phone = checkIndex($data, "client_phone");
-  $client->client_address = checkIndex($data, "client_address");
-  $client->settings_activities_created = date("Y-m-d H:i:s");
-  $client->settings_activities_datetime = date("Y-m-d H:i:s");
-  checkId($client->client_aid);
+  $product->product_aid = $_GET['productid'];
+  $product->product_category = checkIndex($data, "product_category");
+  $product->product_description = checkIndex($data, "product_description");
+  $product->product_price = checkIndex($data, "product_price");
+  $product->product_quantity = checkIndex($data, "product_quantity");
+  $product->product_brand = checkIndex($data, "product_brand");
+  $product->product_datetime = date("Y-m-d H:i:s");
+  checkId($product->product_aid);
   // update
-  $query = checkUpdate($client);
-  returnSuccess($client, "client", $query);
+  $query = checkUpdate($product);
+  returnSuccess($product, "product", $query);
 }
 
 // return 404 error if endpoint not available
