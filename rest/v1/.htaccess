@@ -28,3 +28,8 @@ RewriteRule ^services/active/([0-9]+)$ controllers/settings/services/active.php?
 RewriteRule ^orders$ controllers/orders/orders.php [L]
 RewriteRule ^orders/([0-9]+)$ controllers/orders/orders.php?orderid=$1 [L]
 RewriteRule ^orders/active/([0-9]+)$ controllers/orders/orders.php?orderid=$1 [L]
+
+#product
+RewriteRule ^product$ controllers/product/product.php [L]
+RewriteRule ^product/([0-9]+)$ controllers/product/product.php?productid=$1 [L]
+RewriteRule ^product/active/([0-9]+)$ controllers/product/product.php?productid=$1 [L]

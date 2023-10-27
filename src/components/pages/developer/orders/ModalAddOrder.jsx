@@ -115,7 +115,11 @@ const ModalAddOrder = ({ itemEdit , services , client}) => {
             }}
           >
             {(props) => {
-              props.values.order_price = serviceCost;
+              if(props.values.oprder_price){
+                props.values.order_price = serviceCost;
+              }else{
+                itemEdit.order_price
+              }
               return (
                 <Form>
                   <div className="modal__body">
